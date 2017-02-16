@@ -1,0 +1,35 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:controller="hu.multiplayermnkgame.gameconfiguration.Controller" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+    <top>
+        <Label alignment="BOTTOM_CENTER" prefWidth="500">Többszemélyes m,n,k-játék</Label>
+    </top>
+    <center>
+        <GridPane  alignment="CENTER" hgap="10" vgap="10">
+            <Label GridPane.rowIndex="0" GridPane.columnIndex="0"  alignment="BOTTOM_LEFT" prefWidth="200">A tábla méretei:</Label>
+            <TextField fx:id="textFieldM"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1" alignment="center" prefWidth="60">6</TextField>
+            <TextField fx:id="textFieldN"
+                       GridPane.rowIndex="0" GridPane.columnIndex="2" alignment="center" prefWidth="60">6</TextField>
+            <Label GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="BOTTOM_LEFT" prefWidth="200">Nyerő jelsorozat hossza:</Label>
+            <TextField fx:id="textFieldK"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="center" prefWidth="60">3</TextField>
+            <Label GridPane.rowIndex="2" GridPane.columnIndex="0"  alignment="BOTTOM_LEFT" prefWidth="200">Játékosok száma:</Label>
+            <TextField fx:id="textFieldNumberOfPlayers"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1" alignment="center" prefWidth="60">3</TextField>
+            <Label  GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BOTTOM_LEFT" prefWidth="200">Algoritmus és heurisztika:</Label>
+            <VBox fx:id="vBox"
+                  GridPane.rowIndex="4" GridPane.columnIndex="0" alignment="BOTTOM_LEFT"></VBox>
+            <CheckBox fx:id="checkBoxStatistics"
+                      GridPane.rowIndex="5" GridPane.columnIndex="0" alignment="BOTTOM_LEFT" prefWidth="200">Lépések elemzése</CheckBox>
+
+        </GridPane>
+    </center>
+    <bottom>
+        <HBox spacing="330" alignment="center">
+            <Button text="Játék indítása" onAction="#handleStartButtonAction"/>
+        </HBox>
+    </bottom>
+</BorderPane>

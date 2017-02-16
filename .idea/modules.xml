@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multiplayermnkgame.iml" filepath="$PROJECT_DIR$/.idea/modules/multiplayermnkgame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multiplayermnkgame_main.iml" filepath="$PROJECT_DIR$/.idea/modules/multiplayermnkgame_main.iml" group="multiplayermnkgame" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multiplayermnkgame_test.iml" filepath="$PROJECT_DIR$/.idea/modules/multiplayermnkgame_test.iml" group="multiplayermnkgame" />
+    </modules>
+  </component>
+</project>
