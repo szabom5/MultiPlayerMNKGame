@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("gameconfig.fxml"));
         primaryStage.setTitle("Multi Player M,N,K - Game");
-        primaryStage.setScene(new Scene(root, 400, 600));
+        primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
     }
 

@@ -7,6 +7,7 @@
         <Label alignment="BOTTOM_CENTER" prefWidth="500">Többszemélyes m,n,k-játék</Label>
     </top>
     <center>
+        <VBox>
         <GridPane  alignment="CENTER" hgap="10" vgap="10">
             <Label GridPane.rowIndex="0" GridPane.columnIndex="0"  alignment="BOTTOM_LEFT" prefWidth="200">A tábla méretei:</Label>
             <TextField fx:id="textFieldM"
@@ -16,20 +17,23 @@
             <Label GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="BOTTOM_LEFT" prefWidth="200">Nyerő jelsorozat hossza:</Label>
             <TextField fx:id="textFieldK"
                        GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="center" prefWidth="60">3</TextField>
-            <Label GridPane.rowIndex="2" GridPane.columnIndex="0"  alignment="BOTTOM_LEFT" prefWidth="200">Játékosok száma:</Label>
-            <TextField fx:id="textFieldNumberOfPlayers"
-                       GridPane.rowIndex="2" GridPane.columnIndex="1" alignment="center" prefWidth="60">3</TextField>
-            <Label  GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BOTTOM_LEFT" prefWidth="200">Algoritmus és heurisztika:</Label>
-            <VBox fx:id="vBox"
-                  GridPane.rowIndex="4" GridPane.columnIndex="0" alignment="BOTTOM_LEFT"></VBox>
-            <CheckBox fx:id="checkBoxStatistics"
-                      GridPane.rowIndex="5" GridPane.columnIndex="0" alignment="BOTTOM_LEFT" prefWidth="200">Lépések elemzése</CheckBox>
-
+            <Label GridPane.rowIndex="2" GridPane.columnIndex="0"  alignment="BOTTOM_LEFT" prefWidth="500">Játékosok és algoritmusok és heurisztikák: :</Label>
+            <Button fx:id="buttonPlusPlayer" onAction="#handlePlayerAdded"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1" alignment="center" prefWidth="30">+</Button>
+            <Button fx:id="buttonMinusPlayer" onAction="#handlePlayerRemoved"
+                    GridPane.rowIndex="2" GridPane.columnIndex="2" alignment="center" prefWidth="30">-</Button>
         </GridPane>
+        <ScrollPane prefWidth="500" prefHeight="300">
+            <GridPane fx:id="gridPanePlayers"
+                    alignment="CENTER" hgap="10" vgap="10"/>
+        </ScrollPane>
+        </VBox>
     </center>
     <bottom>
-        <HBox spacing="330" alignment="center">
-            <Button text="Játék indítása" onAction="#handleStartButtonAction"/>
+        <HBox spacing="20" alignment="center">
+            <CheckBox fx:id="checkBoxStatistics"
+                      alignment="BOTTOM_LEFT" prefWidth="200">Lépések elemzése</CheckBox>
+            <Button alignment="CENTER" text="Játék indítása" onAction="#handleStart"/>
         </HBox>
     </bottom>
 </BorderPane>
