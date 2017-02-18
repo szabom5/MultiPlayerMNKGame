@@ -9,14 +9,16 @@ import hu.multiplayermnkgame.game.heuristic.RulesHeuristic;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,30 +56,26 @@ public class Controller {
 
     public static boolean logging = false;
 
-    public void handleStart(ActionEvent actionEvent) {
+    public void handleStart(ActionEvent actionEvent) throws IOException {
 
-        getInputFromUser();
+        if(isInputFromUserValid()){
 
-        Map<Integer, Pair<MultiPlayerAlgorithm, Heuristic>> mapOfPlayerStrategies = new HashMap<>();
+            getInputFromUser();
 
-        for (int i = 1; i <= numberOfPlayers; ++i) {
-            mapOfPlayerStrategies.put(i, new Pair(listOfPlayerAlgorithms[i], listOfPlayerHeuristics[i]));
+            GameLoop gameLoop = initializeGameLoop();
+
+            createNewScene(actionEvent, gameLoop);
         }
 
-        GameLoop gameLoop = new GameLoop.GameLoopBuilder()
-                .setNumberOfPlayers(numberOfPlayers)
-                .setBoardParameters(M, N)
-                .setWinningNumber(K)
-                .setMapOfPlayerStrategies(mapOfPlayerStrategies)
-                .setLogging(logging)
-                .build();
+    }
 
-        gameLoop.loop();
+    private boolean isInputFromUserValid() {
+        //TODO checking for invalid initializations
+        return true;
     }
 
     @FXML
     private void getInputFromUser() {
-        //TODO checking for invalid initializations
 
         M = Integer.parseInt(textFieldM.getText());
         N = Integer.parseInt(textFieldN.getText());
@@ -103,6 +101,41 @@ public class Controller {
         }
 
         logging = checkBoxStatistics.isSelected();
+    }
+
+    private void createNewScene(ActionEvent actionEvent, GameLoop gameLoop) throws IOException {
+        Button startButton = (Button) actionEvent.getSource();
+
+        Stage stage = (Stage) startButton.getScene().getWindow();
+
+        GameBoardController gameBoardController = new GameBoardController(gameLoop);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gameboard.fxml"));
+        loader.setController(gameBoardController);
+
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root,600,600);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private GameLoop initializeGameLoop() {
+        Map<Integer, Pair<MultiPlayerAlgorithm, Heuristic>> mapOfPlayerStrategies = new HashMap<>();
+
+        for (int i = 1; i <= numberOfPlayers; ++i) {
+            mapOfPlayerStrategies.put(i, new Pair(listOfPlayerAlgorithms[i], listOfPlayerHeuristics[i]));
+        }
+
+        GameLoop gameLoop = new GameLoop.GameLoopBuilder()
+                .setNumberOfPlayers(numberOfPlayers)
+                .setBoardParameters(M, N)
+                .setWinningNumber(K)
+                .setMapOfPlayerStrategies(mapOfPlayerStrategies)
+                .setLogging(logging)
+                .build();
+
+        return gameLoop;
     }
     @FXML
     public void handlePlayerAdded(ActionEvent actionEvent) {

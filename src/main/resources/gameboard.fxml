@@ -1,0 +1,15 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane  xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+    <top>
+        <Label alignment="BOTTOM_CENTER" prefWidth="500">Többszemélyes m,n,k-játék</Label>
+    </top>
+    <center>
+        <Pane fx:id="boardPane">
+            <VBox fx:id="rowsVBox"/>
+        </Pane>
+    </center>
+
+</BorderPane>
