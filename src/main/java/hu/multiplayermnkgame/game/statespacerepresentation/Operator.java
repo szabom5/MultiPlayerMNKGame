@@ -25,7 +25,7 @@ public class Operator {
     public boolean applicable(State state){
         int numAllMarks = state.countAllMarks();
 
-        return (numAllMarks % numOfPlayers == mark-1)  && (state.a[x][y] == 0);
+        return (numAllMarks % numberOfPlayers == mark-1)  && (state.a[x][y] == 0);
     }
 
     public boolean isNextToMark(State state){

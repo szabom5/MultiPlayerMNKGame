@@ -2,7 +2,7 @@ package hu.multiplayermnkgame.game.gamerepresentation;
 
 import hu.multiplayermnkgame.game.statespacerepresentation.State;
 
-import static hu.multiplayermnkgame.game.gameplay.GameLoop.numOfPlayers;
+import static hu.multiplayermnkgame.game.gameplay.GameLoop.numberOfPlayers;
 
 public class GameState {
     public State state;
@@ -32,7 +32,7 @@ public class GameState {
         if ( lastStep != null && isEnd() ) {
             String result = state.toString()+"\n End ";
             if ( state.isNotDeal(lastStep.getX(),lastStep.getY()) )
-                result += player==1?numOfPlayers:(player-1) +" win.";
+                result += player==1? numberOfPlayers :(player-1) +" win.";
             else
                 result +="DEAL";
             return result;

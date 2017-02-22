@@ -15,7 +15,7 @@ public class PlaySpace {
         steps = new ArrayList<>();
         for(int i=1; i<=N;i++){
             for(int j=1; j<=M;j++){
-                for(int p = 1; p<=numOfPlayers;p++)
+                for(int p = 1; p<= numberOfPlayers; p++)
                 steps.add(new Step(new Operator(i,j,p),p));
             }
         }

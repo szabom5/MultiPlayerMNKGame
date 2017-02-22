@@ -53,7 +53,7 @@ public class PatternHeur{
     }
 
     private int[] countPatterns(State state) {
-        int[] res = new int[numOfPlayers+1];
+        int[] res = new int[numberOfPlayers +1];
 
         //count Right Diagonal
         String rightDiag = readRightDiagString();
@@ -90,7 +90,7 @@ public class PatternHeur{
             System.out.println("heuristic:");
             System.out.println(state.toString());
             System.out.print("res[");
-            for(int i = 1; i <= numOfPlayers; ++i){
+            for(int i = 1; i <= numberOfPlayers; ++i){
                 if(i != supportedPlayer){
                     res[i] = -1 * res[supportedPlayer];
                 }

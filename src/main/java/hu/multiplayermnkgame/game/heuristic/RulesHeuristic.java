@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static hu.multiplayermnkgame.gameconfiguration.Controller.*;
+import static hu.multiplayermnkgame.game.gameplay.GameLoop.*;
 
 /**
  * This implementation of a heuristic function is based on a set of rules.
@@ -38,13 +38,13 @@ public class RulesHeuristic implements Heuristic{
 
     private List<Pattern> patternFirstRule;
 
-    private final List<List<Pattern>> patternSecondRule;
+    private List<List<Pattern>> patternSecondRule;
 
-    private final List<Map<Pattern, Double>> patternThirdRule;
+    private List<Map<Pattern, Double>> patternThirdRule;
 
     private double result;
 
-    public RulesHeuristic() {
+    public void initialize() {
         patternFirstRule = new ArrayList<>();
         patternSecondRule = new ArrayList<>();
         patternThirdRule = new ArrayList<>();

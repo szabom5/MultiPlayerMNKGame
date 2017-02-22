@@ -18,20 +18,29 @@ public class GameLoop {
     // 2 <= K <= min(M,N)
     public static int K;
 
-    public static int numOfPlayers;
+    public static int numberOfPlayers;
 
     private Map<Integer, Pair<MultiPlayerAlgorithm, Heuristic>> mapOfPlayerStrategies;
 
     public static boolean logging;
 
     private GameLoop(GameLoopBuilder builder){
-        numOfPlayers = builder.numOfPlayers;
+        numberOfPlayers = builder.numOfPlayers;
         N = builder.N;
         M = builder.M;
         K = builder.K;
 
         this.mapOfPlayerStrategies = new HashMap<>(builder.mapOfPlayerStrategies);
+        initializeHeuristics();
         logging = builder.logging;
+    }
+
+    private void initializeHeuristics() {
+        for(Map.Entry entry : mapOfPlayerStrategies.entrySet()){
+            if(entry.getValue() instanceof RulesHeuristic){
+                ((RulesHeuristic) entry.getValue()).initialize();
+            }
+        }
     }
 
     public void loop(){
@@ -47,7 +56,7 @@ public class GameLoop {
         while ( !gameState.isEnd() ) {
 
             System.out.println(gameState);
-            player = (numberOfMarks-1) % numOfPlayers + 1;
+            player = (numberOfMarks-1) % numberOfPlayers + 1;
 
             final long startTime = System.currentTimeMillis();
 
@@ -93,7 +102,7 @@ public class GameLoop {
 
 
         }
-        //System.out.println("playerend="+playState.numOfPlayers);
+        //System.out.println("playerend="+playState.numberOfPlayers);
         System.out.println(gameState);
     }
 
@@ -120,7 +129,7 @@ public class GameLoop {
     }
 
     public int getNumOfPlayers() {
-        return numOfPlayers;
+        return numberOfPlayers;
     }
 
     public Map<Integer, Pair<MultiPlayerAlgorithm, Heuristic>> getMapOfPlayerStrategies() {

@@ -2,10 +2,10 @@ package hu.multiplayermnkgame.game.gamerepresentation;
 
 import hu.multiplayermnkgame.game.statespacerepresentation.Operator;
 
-import static hu.multiplayermnkgame.game.gameplay.GameLoop.numOfPlayers;
+import static hu.multiplayermnkgame.game.gameplay.GameLoop.numberOfPlayers;
 
 public class Step {
-    // the operator to use, which contains the numOfPlayers already
+    // the operator to use, which contains the numberOfPlayers already
     public Operator operator;
     // the players who is placing a mark on the table
     public int player;
@@ -29,7 +29,7 @@ public class Step {
     }
 
     public GameState apply(GameState oldState){
-        return new GameState(operator.apply(oldState.state), (player==numOfPlayers)?1:(player+1), this);
+        return new GameState(operator.apply(oldState.state), (player== numberOfPlayers)?1:(player+1), this);
     }
 
     public int getX() {

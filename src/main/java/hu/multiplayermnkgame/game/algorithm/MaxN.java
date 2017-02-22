@@ -46,15 +46,15 @@ public class MaxN implements MultiPlayerAlgorithm{
 
     private static double[] eval( GameState state, PlaySpace ps, Heuristic heur, int limit ) {
         if ( state.isEnd() || limit == 0 ){
-            double[] result = new double[numOfPlayers+1];
-            for(int i = 1; i <= numOfPlayers; ++i){
+            double[] result = new double[numberOfPlayers +1];
+            for(int i = 1; i <= numberOfPlayers; ++i){
                 result[i] = heur.heuristic(state,i);
             }
 
             return result;
         }
 
-        double[] maxV = new double[numOfPlayers+1];
+        double[] maxV = new double[numberOfPlayers +1];
         Arrays.fill(maxV,Integer.MIN_VALUE);
 
         for ( Step step : ps.steps )

@@ -44,7 +44,7 @@ public class State {
      * Checks if the state is a goal state
      * @param x the x coordinate of the last move
      * @param y the y coordinate of the last move
-     * @return the result of the check: 1,2,...numOfPlayers if somebody won by K marks; -1 if the table is full and nobody won; 0 otherwise
+     * @return the result of the check: 1,2,...numberOfPlayers if somebody won by K marks; -1 if the table is full and nobody won; 0 otherwise
      */
     public int isEnd(int x, int y){
         // only before first step
@@ -72,7 +72,7 @@ public class State {
      * Checks if K marks are in a row, two ways: E-W and M-S
      * @param x the x coordinate of the last move
      * @param y the y coordinate of the last move
-     * @return the result of the check: 1,2,...numOfPlayers if K marks are found; 0 otherwise
+     * @return the result of the check: 1,2,...numberOfPlayers if K marks are found; 0 otherwise
      */
     private int isEndOnStraightLines(int x, int y) {
         int player = a[x][y];
@@ -138,7 +138,7 @@ public class State {
      * Checks if K marks are in a diagonal, two ways: NE-SW and NW-SE
      * @param x the x coordinate of the last move
      * @param y the y coordinate of the last move
-     * @return the result of the check: 1,2,...numOfPlayers if K marks are found; 0 otherwise
+     * @return the result of the check: 1,2,...numberOfPlayers if K marks are found; 0 otherwise
      */
     private int isEndOnDiagonals(int x, int y) {
         int player = a[x][y];
@@ -222,7 +222,7 @@ public class State {
 
     /**
      * Checks if somebody won the game represented by this State.
-     * @return 1...numOfPlayers if the numOfPlayers won, 0 if it is a tie
+     * @return 1...numberOfPlayers if the numberOfPlayers won, 0 if it is a tie
      */
     public int somebodyWon(){
         int result = checkRows();

@@ -48,7 +48,7 @@ public class RulesHeur {
     }
 
     private void initThirdRulePatterns() {
-        for(int p = 1; p <= numOfPlayers; ++p){
+        for(int p = 1; p <= numberOfPlayers; ++p){
 
             Map<Pattern, Double>  patterns = new HashMap<>();
             for(int i = 1; i <= K; ++i){
@@ -68,9 +68,9 @@ public class RulesHeur {
     }
 
     private void initSecondRulePatterns() {
-        for(int i = 1; i <= numOfPlayers; ++i){
+        for(int i = 1; i <= numberOfPlayers; ++i){
             List<Pattern> blockOtherPlayerPatterns = new ArrayList<>();
-            for(int j = 1; j <= numOfPlayers; ++j){
+            for(int j = 1; j <= numberOfPlayers; ++j){
                 if(j == i){
                     continue;
                 }
@@ -84,7 +84,7 @@ public class RulesHeur {
     }
 
     private void initFirstRulePatterns() {
-        for(int i = 1; i <= numOfPlayers; ++i){
+        for(int i = 1; i <= numberOfPlayers; ++i){
             // Example: 0011120 winning line for player 1
             Pattern pattern = Pattern.compile(".*?"+i+"{"+K+"}.*?");
             patternFirstRule.add(pattern);
@@ -95,7 +95,7 @@ public class RulesHeur {
 
         state = gameState.state;
 
-        result = new int[numOfPlayers+1];
+        result = new int[numberOfPlayers +1];
 
         checkTable();
 
