@@ -38,19 +38,19 @@ public class ConfigurationPane extends BorderPane {
 
     private CheckBox checkBoxAnalise;
 
-    private static int M;
+    private int M;
 
-    private static int N;
+    private int N;
 
-    private static int K;
+    private int K;
 
-    private static int numberOfPlayers = 0;
+    private int numberOfPlayers = 0;
 
-    private static MultiPlayerAlgorithm[] listOfPlayerAlgorithms;
+    private MultiPlayerAlgorithm[] listOfPlayerAlgorithms;
 
-    private static Heuristic[] listOfPlayerHeuristics;
+    private Heuristic[] listOfPlayerHeuristics;
 
-    private static boolean logging = false;
+    private boolean logging = false;
 
     public ConfigurationPane(Control parent, EventHandler<ActionEvent> eventHandler) {
         this.parent = parent;
@@ -203,7 +203,7 @@ public class ConfigurationPane extends BorderPane {
         listOfPlayerAlgorithms = new MultiPlayerAlgorithm[numberOfPlayers + 1];
         for (int i = 1; i <= numberOfPlayers; i++) {
             if (((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(1)).getValue().toString().equals("Max N")) {
-                listOfPlayerAlgorithms[i] = new MaxN();
+                listOfPlayerAlgorithms[i] = new MaxN(numberOfPlayers);
             } else {
                 listOfPlayerAlgorithms[i] = new Paranoid();
             }
@@ -212,31 +212,31 @@ public class ConfigurationPane extends BorderPane {
         logging = checkBoxAnalise.isSelected();
     }
 
-    public static int getM() {
+    public int getM() {
         return M;
     }
 
-    public static int getN() {
+    public int getN() {
         return N;
     }
 
-    public static int getK() {
+    public int getK() {
         return K;
     }
 
-    public static int getNumberOfPlayers() {
+    public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
-    public static MultiPlayerAlgorithm[] getListOfPlayerAlgorithms() {
+    public MultiPlayerAlgorithm[] getListOfPlayerAlgorithms() {
         return listOfPlayerAlgorithms;
     }
 
-    public static Heuristic[] getListOfPlayerHeuristics() {
+    public Heuristic[] getListOfPlayerHeuristics() {
         return listOfPlayerHeuristics;
     }
 
-    public static boolean isLogging() {
+    public boolean isLogging() {
         return logging;
     }
 

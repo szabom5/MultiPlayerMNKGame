@@ -2,25 +2,26 @@ package hu.multiplayermnkgame.game.gamerepresentation;
 
 import hu.multiplayermnkgame.game.statespacerepresentation.Operator;
 
-import static hu.multiplayermnkgame.game.gameplay.GameLoop.numberOfPlayers;
-
 public class Step {
+    private final GameAttributes attributes;
     // the operator to use, which contains the numberOfPlayers already
     public Operator operator;
     // the players who is placing a mark on the table
     public int player;
 
-    public Step(){
-        operator = new Operator(-1,-1,0);
+    public Step(GameAttributes attributes) {
+        this.attributes = attributes;
+        operator = new Operator(-1, -1, 0, attributes);
         player = 0;
     }
 
-    public Step(Operator operator, int player) {
+    public Step(Operator operator, int player, GameAttributes attributes) {
+        this.attributes = attributes;
         this.operator = operator;
         this.player = player;
     }
 
-    public boolean applicable(GameState gameState){
+    public boolean applicable(GameState gameState) {
         return operator.applicable(gameState.state);
     }
 
@@ -28,8 +29,9 @@ public class Step {
         return operator.isNextToMark(gameState.state);
     }
 
-    public GameState apply(GameState oldState){
-        return new GameState(operator.apply(oldState.state), (player== numberOfPlayers)?1:(player+1), this);
+    public GameState apply(GameState oldState) {
+        int nextPlayer = (this.player == attributes.getNumberOfPlayers()) ? 1 : (this.player + 1);
+        return new GameState(operator.apply(oldState.state), nextPlayer, this);
     }
 
     public int getX() {
@@ -40,7 +42,8 @@ public class Step {
         return operator.y;
     }
 
+    @Override
     public String toString() {
-        return "step= "+operator.toString();
+        return "step= " + operator.toString();
     }
 }

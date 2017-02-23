@@ -14,14 +14,14 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board extends StackPane {
+public class BoardPane extends StackPane {
     private int m;
     private int n;
     private VBox vBox;
     private List<Rectangle> rectangleList;
     private List signsList;
 
-    public Board(int m, int n) {
+    public BoardPane(int m, int n) {
         this.m = m;
         this.n = n;
         setMinSize(30, 30);

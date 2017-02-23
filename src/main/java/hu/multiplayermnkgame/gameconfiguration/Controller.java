@@ -2,8 +2,9 @@ package hu.multiplayermnkgame.gameconfiguration;
 
 import hu.multiplayermnkgame.game.algorithm.MultiPlayerAlgorithm;
 import hu.multiplayermnkgame.game.gameplay.GameLoop;
+import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 import hu.multiplayermnkgame.game.heuristic.Heuristic;
-import hu.multiplayermnkgame.gameview.Board;
+import hu.multiplayermnkgame.gameview.BoardPane;
 import hu.multiplayermnkgame.gameview.ConfigurationPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,7 +17,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class Controller {
 
     private TextArea textAreaLog;
 
-    private Board board;
+    private BoardPane boardPane;
 
     private ConfigurationPane leftBorderPane;
 
@@ -58,7 +58,7 @@ public class Controller {
         Label title = new Label("Többszemélyes m,n,k-játék");
         title.setPrefWidth(500);
         title.setAlignment(Pos.CENTER);
-        title.setPadding(new Insets(10,5,5,5));
+        title.setPadding(new Insets(10, 5, 5, 5));
 
         textAreaLog = new TextArea("****Log****");
         textAreaLog.setMinHeight(Double.MAX_VALUE);
@@ -81,26 +81,29 @@ public class Controller {
 
         startEventHandler = event -> {
 
-            board = new Board(leftBorderPane.getM(), leftBorderPane.getN());
+            boardPane = new BoardPane(leftBorderPane.getM(), leftBorderPane.getN());
 
-            rightBorderPane.setCenter(board);
+            rightBorderPane.setCenter(boardPane);
 
-            GameLoop gameLoop = initializeGameLoop();
+            GameAttributes gameAttributes = initializeGameAttributes();
 
-            board.setSign(1, 1, Color.AQUA);
+            GameLoop gameLoop = new GameLoop(gameAttributes);
+
+            gameLoop.loop();
+
+            boardPane.setSign(1, 1, Color.AQUA);
 
         };
     }
 
-
-    private GameLoop initializeGameLoop() {
+    private GameAttributes initializeGameAttributes() {
         Map<Integer, Pair<MultiPlayerAlgorithm, Heuristic>> mapOfPlayerStrategies = new HashMap<>();
 
         for (int i = 1; i <= leftBorderPane.getNumberOfPlayers(); ++i) {
             mapOfPlayerStrategies.put(i, new Pair(leftBorderPane.getListOfPlayerAlgorithms()[i], leftBorderPane.getListOfPlayerHeuristics()[i]));
         }
 
-        return new GameLoop.GameLoopBuilder()
+        return new GameAttributes.GameAttributesBuilder()
                 .setNumberOfPlayers(leftBorderPane.getNumberOfPlayers())
                 .setBoardParameters(leftBorderPane.getM(), leftBorderPane.getN())
                 .setWinningNumber(leftBorderPane.getK())
@@ -108,6 +111,4 @@ public class Controller {
                 .setLogging(leftBorderPane.isLogging())
                 .build();
     }
-
-
 }
