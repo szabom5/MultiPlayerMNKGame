@@ -21,6 +21,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 
+import static javafx.geometry.Pos.CENTER;
+
 public class ConfigurationPane extends BorderPane {
     private Control parent;
 
@@ -34,18 +36,14 @@ public class ConfigurationPane extends BorderPane {
 
     private TextField textFieldK;
 
-    private CheckBox checkBoxAnalize;
+    private CheckBox checkBoxAnalise;
 
-    // M >= 2
     private static int M;
 
-    // N >= 2
     private static int N;
 
-    // 2 <= K <= min(M,N)
     private static int K;
 
-    //numberOfPlayers >= 2
     private static int numberOfPlayers = 0;
 
     private static MultiPlayerAlgorithm[] listOfPlayerAlgorithms;
@@ -62,12 +60,12 @@ public class ConfigurationPane extends BorderPane {
     public void initialize() {
         Label title = new Label("Beállítások");
         title.setPrefWidth(500);
-        title.setAlignment(Pos.BOTTOM_CENTER);
+        title.setAlignment(CENTER);
 
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
+        gridPane.setHgap(5);
         gridPane.setVgap(10);
-        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setAlignment(CENTER);
         Label label1 = new Label("A tábla méretei:");
         label1.setPrefWidth(200);
         gridPane.addRow(0, label1);
@@ -89,37 +87,44 @@ public class ConfigurationPane extends BorderPane {
         Label label3 = new Label("Játékosok:");
         label3.setPrefWidth(200);
         Button buttonPlus = new Button("+");
-        buttonPlus.setMaxWidth(25);
+        buttonPlus.setStyle("-fx-background-color:lightgreen");
+        buttonPlus.setMaxWidth(30);
         buttonPlus.setOnAction(this::handlePlayerAdded);
         Button buttonMinus = new Button("-");
-        buttonMinus.setMaxWidth(25);
+        buttonMinus.setStyle("-fx-background-color:tomato");
+        buttonMinus.setMaxWidth(30);
         buttonMinus.setOnAction(this::handlePlayerRemoved);
         gridPane.addRow(2, label3, buttonPlus, buttonMinus);
 
         gridPanePlayers = new GridPane();
-        gridPanePlayers.setHgap(10);
+        gridPanePlayers.setPadding(new Insets(5,1,5,1));
         gridPanePlayers.setVgap(5);
 
         ScrollPane scrollPane = new ScrollPane(gridPanePlayers);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setPrefHeight(500);
 
-        setCenter(new VBox(gridPane, scrollPane));
-        setPadding(new Insets(5, 20, 5, 20));
-        setTop(title);
-
-        minWidthProperty().bind(parent.widthProperty().multiply(0.3));
+        VBox vBox = new VBox(5, gridPane, scrollPane);
 
         Button startButton = new Button("Start");
         startButton.setOnAction(this::handleStart);
 
         HBox hBoxBottom = new HBox();
-        hBoxBottom.setSpacing(10);
-        checkBoxAnalize = new CheckBox("Lépések elemzése");
-        hBoxBottom.getChildren().add(checkBoxAnalize);
+        hBoxBottom.setSpacing(20);
+        hBoxBottom.setPadding(new Insets(5,5,10,5));
+        hBoxBottom.setAlignment(CENTER);
+        checkBoxAnalise = new CheckBox("Lépések elemzése");
+        hBoxBottom.getChildren().add(checkBoxAnalise);
         hBoxBottom.getChildren().add(startButton);
 
+        setCenter(vBox);
+        setTop(title);
         setBottom(hBoxBottom);
+
+        setPadding(new Insets(10, 10, 5, 10));
+        minWidthProperty().bind(parent.widthProperty().multiply(0.3));
+
+        setStyle("-fx-background-color:lemonchiffon");
     }
 
     @FXML
@@ -129,20 +134,22 @@ public class ConfigurationPane extends BorderPane {
     }
 
     private HBox createHBoxForPlayer(int player) {
-        HBox hBox = new HBox(20);
+        HBox hBox = new HBox(5);
+        hBox.setAlignment(Pos.CENTER_LEFT);
 
         hBox.getChildren().add(new Label(player + "."));
+
         ComboBox comboBoxAlgorithm = new ComboBox(FXCollections.observableArrayList(
                 "Max N", "Paranoid"));
         comboBoxAlgorithm.setValue("Max N");
         hBox.getChildren().add(comboBoxAlgorithm);
+
         ComboBox comboBoxHeuristic = new ComboBox(FXCollections.observableArrayList(
                 "Rules Heuristic"));
         comboBoxHeuristic.setValue("Rules Heuristic");
         hBox.getChildren().add(comboBoxHeuristic);
-        ObservableList<String> colors = FXCollections.observableArrayList("chocolate", "salmon", "gold", "coral",
-                "darkorchid", "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-                "blueviolet", "brown");
+        ObservableList<String> colors = FXCollections.observableArrayList("blue", "red", "gold",
+            "green", "darkorchid", "darkgoldenrod", "black", "rosybrown", "blueviolet", "brown");
         ComboBox comboBoxColor = new ComboBox(colors);
         Callback<ListView<String>, ListCell<String>> factory = list -> new ColorCell();
 
@@ -202,7 +209,7 @@ public class ConfigurationPane extends BorderPane {
             }
         }
 
-        logging = checkBoxAnalize.isSelected();
+        logging = checkBoxAnalise.isSelected();
     }
 
     public static int getM() {
@@ -237,7 +244,7 @@ public class ConfigurationPane extends BorderPane {
         @Override
         public void updateItem(String item, boolean empty) {
             super.updateItem(item, empty);
-            Rectangle rect = new Rectangle(50, 18);
+            Rectangle rect = new Rectangle(30, 18);
             if (item != null) {
                 rect.setFill(Color.web(item));
                 setGraphic(rect);

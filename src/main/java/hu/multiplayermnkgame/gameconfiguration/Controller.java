@@ -8,6 +8,7 @@ import hu.multiplayermnkgame.gameview.ConfigurationPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -15,6 +16,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
 
 import java.io.IOException;
@@ -55,39 +57,38 @@ public class Controller {
     private BorderPane createRightBorderPane() {
         Label title = new Label("Többszemélyes m,n,k-játék");
         title.setPrefWidth(500);
-        title.setAlignment(Pos.BOTTOM_CENTER);
+        title.setAlignment(Pos.CENTER);
+        title.setPadding(new Insets(10,5,5,5));
 
         textAreaLog = new TextArea("****Log****");
-        textAreaLog.setMinHeight(500);
+        textAreaLog.setMinHeight(Double.MAX_VALUE);
+        textAreaLog.setMaxWidth(140);
 
         ScrollPane scrollPaneLog = new ScrollPane(textAreaLog);
+        scrollPaneLog.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPaneLog.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPaneLog.setMaxWidth(100);
-        scrollPaneLog.setMinHeight(500);
-        scrollPaneLog.setStyle("-fx-background-color:lightgreen");
+        scrollPaneLog.setMaxWidth(150);
 
         rightBorderPane = new BorderPane();
         rightBorderPane.setTop(title);
         rightBorderPane.setRight(scrollPaneLog);
+        rightBorderPane.setStyle("-fx-background-color:lemonchiffon");
 
         return rightBorderPane;
     }
 
     private void handleStart() {
 
-        startEventHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        startEventHandler = event -> {
 
-                board = new Board(leftBorderPane.getM(), leftBorderPane.getN());
+            board = new Board(leftBorderPane.getM(), leftBorderPane.getN());
 
-                rightBorderPane.setCenter(board);
+            rightBorderPane.setCenter(board);
 
-                GameLoop gameLoop = initializeGameLoop();
+            GameLoop gameLoop = initializeGameLoop();
 
-                board.setSign(1, 1, Color.AQUA);
+            board.setSign(1, 1, Color.AQUA);
 
-            }
         };
     }
 
