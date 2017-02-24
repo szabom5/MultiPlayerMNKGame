@@ -44,6 +44,6 @@ public class Step {
 
     @Override
     public String toString() {
-        return "step= " + operator.toString();
+        return "step= (" + operator.toString() + ")";
     }
 }

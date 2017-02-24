@@ -12,18 +12,59 @@ public class GameLoop {
 
     private final GameAttributes attributes;
 
+    private final PlaySpace playSpace;
+
+    private GameState gameState;
+
+    private int numberOfMarks;
+
+    private int status;
+
     public GameLoop(GameAttributes gameAttributes) {
         this.attributes = gameAttributes;
+        playSpace = new PlaySpace(attributes);
+        gameState = GameState.startGameState(attributes);
+    }
+
+    public GameState firstMove() {
+        Step firstStep = new Step(
+                new Operator((attributes.getM() / 2), (attributes.getN() / 2), 1, attributes), 1, attributes);
+
+        gameState = firstStep.apply(gameState);
+
+        status = gameState.isEnd();
+
+        numberOfMarks = 1;
+
+        return gameState;
+    }
+
+    public GameState nextMove() {
+
+        int player = (numberOfMarks - 1) % attributes.getNumberOfPlayers() + 1;
+
+        Step bestStep = attributes.getMapOfPlayerStrategies().get(player).getKey()
+                .offer(gameState, playSpace, attributes.getMapOfPlayerStrategies().get(player).getValue());
+
+        gameState = bestStep.apply(gameState);
+
+        gameState.details = attributes.getMapOfPlayerStrategies().get(player).getKey().getDetails();
+
+        status = gameState.isEnd();
+
+        numberOfMarks++;
+
+        return gameState;
     }
 
     public void loop() {
-        PlaySpace playSpace = new PlaySpace(attributes);
-        GameState gameState = GameState.startGameState(attributes);
+        //PlaySpace playSpace = new PlaySpace(attributes);
+        //GameState gameState = GameState.startGameState(attributes);
 
         int numberOfMarks = 1;
         int player;
 
-        while (!gameState.isEnd()) {
+        while (gameState.isEnd() == 0) {
 
             System.out.println(gameState);
             player = (numberOfMarks - 1) % attributes.getNumberOfPlayers() + 1;
@@ -72,5 +113,9 @@ public class GameLoop {
         Heuristic heuristic = attributes.getMapOfPlayerStrategies().get(player).getValue();
 
         return heuristic == null;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

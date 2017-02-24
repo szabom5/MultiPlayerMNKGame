@@ -16,7 +16,7 @@ public class State {
     public State(GameAttributes attributes) {
         this.attributes = attributes;
         // initial value 0 by default
-        a = new int[attributes.getN() + 1][attributes.getM() + 1];
+        a = new int[attributes.getM() + 1][attributes.getN() + 1];
     }
 
     List<Integer> neighbours(int x, int y) {
@@ -25,15 +25,15 @@ public class State {
         list.add(a[x - 1][y - 1]);  //NorthWest
         list.add(a[x - 1][y]);    //North
         list.add(a[x][y - 1]);    //West
-        if (y + 1 <= attributes.getM()) {
+        if (y + 1 <= attributes.getN()) {
             list.add(a[x - 1][y + 1]);  //NorthEast
             list.add(a[x][y + 1]);    //East
         }
-        if (x + 1 <= attributes.getN()) {
+        if (x + 1 <= attributes.getM()) {
             list.add(a[x + 1][y - 1]);  //SouthWest
             list.add(a[x + 1][y]);    //South
         }
-        if (x + 1 <= attributes.getN() && y + 1 <= attributes.getM()) {
+        if (x + 1 <= attributes.getM() && y + 1 <= attributes.getN()) {
             list.add(a[x + 1][y + 1]);
         }
         return list;
@@ -61,7 +61,7 @@ public class State {
         // the table can be full and somebody still win with the last step
         if (win != 0) {
             return win;
-        } else if (countAllMarks() == attributes.getN() * attributes.getM()) {
+        } else if (countAllMarks() == attributes.getM() * attributes.getN()) {
             return -1;
         } else {
             return 0;
@@ -97,8 +97,8 @@ public class State {
                 // could place IF already found K number of same marks
             }
             // after the original cell
-            if (x < N) {
-                for (int i = x + 1; i <= N; i++) {
+            if (x < M) {
+                for (int i = x + 1; i <= M; i++) {
                     if (a[i][y] == player) {
                         found++;
                     } else {
@@ -124,8 +124,8 @@ public class State {
                 // could place IF already found K number of same marks
             }
             // after the original cell
-            if (y < M) {
-                for (int i = y + 1; i <= M; i++) {
+            if (y < N) {
+                for (int i = y + 1; i <= N; i++) {
                     if (a[x][i] == player) {
                         found++;
                     } else {
@@ -168,8 +168,8 @@ public class State {
                 }
                 // could place IF already found K number of same marks
             }
-            if (x < N && y < M) { // after the original cell : to the M;N corner
-                for (int i = x + 1, j = y + 1; i <= N && j <= M; i++, j++) {
+            if (x < M && y < N) { // after the original cell : to the M;N corner
+                for (int i = x + 1, j = y + 1; i <= M && j <= N; i++, j++) {
                     if (a[i][j] == player) {
                         found++;
                     } else {
@@ -184,8 +184,8 @@ public class State {
                 found = 1;
             }
             //before the original cell: to the 1;N corner
-            if (x > 1 && y < M) {
-                for (int i = x - 1, j = y + 1; i >= 1 && j <= M; i--, j++) {
+            if (x > 1 && y < N) {
+                for (int i = x - 1, j = y + 1; i >= 1 && j <= N; i--, j++) {
                     if (a[i][j] == player) {
                         found++;
                     } else {
@@ -194,8 +194,8 @@ public class State {
                 }
                 // could place IF already found K number of same marks
             }
-            if (x < N && y > 1) { // after the original cell: to the M;1 corner
-                for (int i = x + 1, j = y - 1; i <= N && j >= 1; i++, j--) {
+            if (x < M && y > 1) { // after the original cell: to the M;1 corner
+                for (int i = x + 1, j = y - 1; i <= M && j >= 1; i++, j--) {
                     if (a[i][j] == player) {
                         found++;
                     } else {
@@ -212,8 +212,8 @@ public class State {
 
     public int countAllMarks() {
         int count = 0;
-        for (int i = 1; i <= attributes.getN(); i++)
-            for (int j = 1; j <= attributes.getM(); j++)
+        for (int i = 1; i <= attributes.getM(); i++)
+            for (int j = 1; j <= attributes.getN(); j++)
                 count += (a[i][j] != 0) ? 1 : 0;
         return count;
     }
@@ -243,8 +243,8 @@ public class State {
         int player = 0;
         int count = 0;
 
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= M; j++) {
+        for (int i = 1; i <= M; i++) {
+            for (int j = 1; j <= N; j++) {
                 if (a[i][j] != 0) {
                     if (player == 0) {
                         player = a[i][j];
@@ -282,8 +282,8 @@ public class State {
         int player = 0;
         int count = 0;
 
-        for (int j = 1; j <= M; j++) {
-            for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            for (int i = 1; i <= M; i++) {
                 if (a[i][j] != 0) {
                     if (player == 0) {
                         player = a[i][j];
@@ -322,7 +322,7 @@ public class State {
         int count = 0;
 
         // Left main diagonal line
-        for (int i = 1; i <= Math.min(N, M); i++) {
+        for (int i = 1; i <= Math.min(M, N); i++) {
             if (a[i][i] != 0) {
                 if (player == 0) {
                     player = a[i][i];
@@ -347,8 +347,8 @@ public class State {
         }
 
         //Under the left main diagonal line
-        for (int i = 2; i <= N - K + 1; i++) {
-            for (int j = 1, k = i; j <= Math.min(M, N - i + 1); j++, k++) {
+        for (int i = 2; i <= M - K + 1; i++) {
+            for (int j = 1, k = i; j <= Math.min(N, M - i + 1); j++, k++) {
                 if (a[j][k] != 0) {
                     if (player == 0) {
                         player = a[j][k];
@@ -373,8 +373,8 @@ public class State {
         }
 
         //Above the left main diagonal line
-        for (int j = 2; j <= M - K + 1; j++) {
-            for (int i = 1, k = j; i <= Math.min(N, M - j + 1); i++, k++) {
+        for (int j = 2; j <= N - K + 1; j++) {
+            for (int i = 1, k = j; i <= Math.min(N, N - j + 1); i++, k++) {
                 if (a[i][k] != 0) {
                     if (player == 0) {
                         player = a[i][k];
@@ -399,8 +399,8 @@ public class State {
         }
 
         //Right main diagonal line
-        for (int i = 1, j; i <= Math.min(N, M); i++) {
-            j = M - i + 1;
+        for (int i = 1, j; i <= Math.min(N, N); i++) {
+            j = N - i + 1;
             if (a[i][j] != 0) {
                 if (player == 0) {
                     player = a[i][j];
@@ -425,8 +425,8 @@ public class State {
         }
 
         //Under the right main diagonal line
-        for (int i = 2; i <= N - K + 1; i++) {
-            for (int j = M, k = i; j <= Math.max(1, M - N + i); j--, k++) {
+        for (int i = 2; i <= M - K + 1; i++) {
+            for (int j = N, k = i; j <= Math.max(1, N - M + i); j--, k++) {
                 if (a[j][k] != 0) {
                     if (player == 0) {
                         player = a[j][k];
@@ -451,7 +451,7 @@ public class State {
         }
 
         //Above the right main diagonal line
-        for (int j = M - 1; j <= K; j--) {
+        for (int j = N - 1; j <= K; j--) {
             for (int i = 1, k = j; i <= j; i++, k--) {
                 if (a[i][k] != 0) {
                     if (player == 0) {
@@ -485,8 +485,8 @@ public class State {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= attributes.getN(); i++) {
-            for (int j = 1; j <= attributes.getM(); j++) {
+        for (int i = 1; i <= attributes.getM(); i++) {
+            for (int j = 1; j <= attributes.getN(); j++) {
                 sb.append(' ').append(a[i][j]).append(' ');
             }
             sb.append("\n");

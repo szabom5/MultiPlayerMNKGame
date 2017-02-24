@@ -21,6 +21,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javafx.geometry.Pos.CENTER;
 
 public class ConfigurationPane extends BorderPane {
@@ -50,6 +53,8 @@ public class ConfigurationPane extends BorderPane {
 
     private Heuristic[] listOfPlayerHeuristics;
 
+    private List<Color> playerColors;
+
     private boolean logging = false;
 
     public ConfigurationPane(Control parent, EventHandler<ActionEvent> eventHandler) {
@@ -70,7 +75,7 @@ public class ConfigurationPane extends BorderPane {
         label1.setPrefWidth(200);
         gridPane.addRow(0, label1);
 
-        textFieldM = new TextField("6");
+        textFieldM = new TextField("9");
         textFieldM.setMaxWidth(40);
         textFieldN = new TextField("6");
         textFieldN.setMaxWidth(40);
@@ -97,7 +102,7 @@ public class ConfigurationPane extends BorderPane {
         gridPane.addRow(2, label3, buttonPlus, buttonMinus);
 
         gridPanePlayers = new GridPane();
-        gridPanePlayers.setPadding(new Insets(5,1,5,1));
+        gridPanePlayers.setPadding(new Insets(5, 1, 5, 1));
         gridPanePlayers.setVgap(5);
 
         ScrollPane scrollPane = new ScrollPane(gridPanePlayers);
@@ -106,14 +111,18 @@ public class ConfigurationPane extends BorderPane {
 
         VBox vBox = new VBox(5, gridPane, scrollPane);
 
+        handlePlayerAdded(null);
+        handlePlayerAdded(null);
+
         Button startButton = new Button("Start");
         startButton.setOnAction(this::handleStart);
 
         HBox hBoxBottom = new HBox();
         hBoxBottom.setSpacing(20);
-        hBoxBottom.setPadding(new Insets(5,5,10,5));
+        hBoxBottom.setPadding(new Insets(5, 5, 10, 5));
         hBoxBottom.setAlignment(CENTER);
         checkBoxAnalise = new CheckBox("Lépések elemzése");
+        checkBoxAnalise.setSelected(true);
         hBoxBottom.getChildren().add(checkBoxAnalise);
         hBoxBottom.getChildren().add(startButton);
 
@@ -149,12 +158,13 @@ public class ConfigurationPane extends BorderPane {
         comboBoxHeuristic.setValue("Rules Heuristic");
         hBox.getChildren().add(comboBoxHeuristic);
         ObservableList<String> colors = FXCollections.observableArrayList("blue", "red", "gold",
-            "green", "darkorchid", "darkgoldenrod", "black", "rosybrown", "blueviolet", "brown");
+                "green", "darkorchid", "darkgoldenrod", "black", "rosybrown", "blueviolet", "brown");
         ComboBox comboBoxColor = new ComboBox(colors);
         Callback<ListView<String>, ListCell<String>> factory = list -> new ColorCell();
 
         comboBoxColor.setCellFactory(factory);
         comboBoxColor.setButtonCell(factory.call(null));
+        comboBoxColor.getSelectionModel().select(player - 1);
         hBox.getChildren().add(comboBoxColor);
 
         return hBox;
@@ -203,10 +213,16 @@ public class ConfigurationPane extends BorderPane {
         listOfPlayerAlgorithms = new MultiPlayerAlgorithm[numberOfPlayers + 1];
         for (int i = 1; i <= numberOfPlayers; i++) {
             if (((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(1)).getValue().toString().equals("Max N")) {
-                listOfPlayerAlgorithms[i] = new MaxN(numberOfPlayers);
+                listOfPlayerAlgorithms[i] = new MaxN();
             } else {
                 listOfPlayerAlgorithms[i] = new Paranoid();
             }
+        }
+
+        playerColors = new ArrayList<>();
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            String colorString = ((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(3)).getValue().toString();
+            playerColors.add(Color.web(colorString));
         }
 
         logging = checkBoxAnalise.isSelected();
@@ -234,6 +250,10 @@ public class ConfigurationPane extends BorderPane {
 
     public Heuristic[] getListOfPlayerHeuristics() {
         return listOfPlayerHeuristics;
+    }
+
+    public List<Color> getPlayerColors() {
+        return playerColors;
     }
 
     public boolean isLogging() {

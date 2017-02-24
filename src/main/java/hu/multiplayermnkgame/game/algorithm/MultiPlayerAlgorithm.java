@@ -9,5 +9,7 @@ public interface MultiPlayerAlgorithm {
 
     Step offer(GameState state, PlaySpace ps, Heuristic h);
 
+    double[][] getDetails();
+
     String name();
 }

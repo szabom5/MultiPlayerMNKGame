@@ -104,7 +104,7 @@ public class BoardPane extends StackPane {
         if (g == null) return;
         Label t = new Label(sign);
         t.setAlignment(Pos.CENTER);
-        t.setStyle("-fx-text-fill: white");
+        t.setStyle("-fx-text-fill: black");
         g.getChildren().add(t);
         signsList.add(t);
         Rectangle rec = rectangleList.get(0);
@@ -115,6 +115,24 @@ public class BoardPane extends StackPane {
         t.setMaxHeight(rw - 2);
     }
 
+    public void clearNumbers() {
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                Group g = getGroup(i, j);
+                Object object = g.getChildren().get(g.getChildren().size() - 1);
+                if (object instanceof Label) {
+                    g.getChildren().remove(g.getChildren().size() - 1);
+                }
+            }
+        }
+    }
+
+    private void clearSign(int row, int col) {
+        Group g = getGroup(row, col);
+        if (g == null) return;
+        g.getChildren().remove(g.getChildren().size() - 1);
+    }
+
     private Group getGroup(int row, int col) {
         try {
             return (Group) ((HBox) vBox.getChildren().get(row)).getChildren().get(col);
@@ -122,5 +140,4 @@ public class BoardPane extends StackPane {
             return null;
         }
     }
-
 }

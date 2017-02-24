@@ -3,20 +3,15 @@ package hu.multiplayermnkgame.gameconfiguration;
 import hu.multiplayermnkgame.game.algorithm.MultiPlayerAlgorithm;
 import hu.multiplayermnkgame.game.gameplay.GameLoop;
 import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
+import hu.multiplayermnkgame.game.gamerepresentation.GameState;
 import hu.multiplayermnkgame.game.heuristic.Heuristic;
-import hu.multiplayermnkgame.gameview.BoardPane;
 import hu.multiplayermnkgame.gameview.ConfigurationPane;
+import hu.multiplayermnkgame.gameview.GamePane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
 import java.io.IOException;
@@ -27,11 +22,7 @@ public class Controller {
     @FXML
     private SplitPane splitPane;
 
-    private BorderPane rightBorderPane;
-
-    private TextArea textAreaLog;
-
-    private BoardPane boardPane;
+    private GamePane rightBorderPane;
 
     private ConfigurationPane leftBorderPane;
 
@@ -55,25 +46,7 @@ public class Controller {
     }
 
     private BorderPane createRightBorderPane() {
-        Label title = new Label("Többszemélyes m,n,k-játék");
-        title.setPrefWidth(500);
-        title.setAlignment(Pos.CENTER);
-        title.setPadding(new Insets(10, 5, 5, 5));
-
-        textAreaLog = new TextArea("****Log****");
-        textAreaLog.setMinHeight(Double.MAX_VALUE);
-        textAreaLog.setMaxWidth(140);
-
-        ScrollPane scrollPaneLog = new ScrollPane(textAreaLog);
-        scrollPaneLog.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPaneLog.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPaneLog.setMaxWidth(150);
-
-        rightBorderPane = new BorderPane();
-        rightBorderPane.setTop(title);
-        rightBorderPane.setRight(scrollPaneLog);
-        rightBorderPane.setStyle("-fx-background-color:lemonchiffon");
-
+        rightBorderPane = new GamePane();
         return rightBorderPane;
     }
 
@@ -81,18 +54,15 @@ public class Controller {
 
         startEventHandler = event -> {
 
-            boardPane = new BoardPane(leftBorderPane.getM(), leftBorderPane.getN());
-
-            rightBorderPane.setCenter(boardPane);
-
             GameAttributes gameAttributes = initializeGameAttributes();
 
             GameLoop gameLoop = new GameLoop(gameAttributes);
 
-            gameLoop.loop();
+            rightBorderPane.initialize(gameAttributes, gameLoop);
 
-            boardPane.setSign(1, 1, Color.AQUA);
+            GameState firstGameState = gameLoop.firstMove();
 
+            rightBorderPane.updateBoard(firstGameState);
         };
     }
 
@@ -108,6 +78,7 @@ public class Controller {
                 .setBoardParameters(leftBorderPane.getM(), leftBorderPane.getN())
                 .setWinningNumber(leftBorderPane.getK())
                 .setMapOfPlayerStrategies(mapOfPlayerStrategies)
+                .setPlayerColors(leftBorderPane.getPlayerColors())
                 .setLogging(leftBorderPane.isLogging())
                 .build();
     }

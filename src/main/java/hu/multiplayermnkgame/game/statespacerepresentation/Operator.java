@@ -45,8 +45,8 @@ public class Operator {
 
     public State apply(State oldState) {
         State newState = new State(attributes);
-        for (int i = 1; i <= attributes.getN(); i++)
-            for (int j = 1; j <= attributes.getM(); j++)
+        for (int i = 1; i <= attributes.getM(); i++)
+            for (int j = 1; j <= attributes.getN(); j++)
                 newState.a[i][j] = (i == x && j == y) ? mark : oldState.a[i][j];
         return newState;
     }
