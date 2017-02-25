@@ -70,7 +70,8 @@ public class Controller {
         Map<Integer, Pair<MultiPlayerAlgorithm, Heuristic>> mapOfPlayerStrategies = new HashMap<>();
 
         for (int i = 1; i <= leftBorderPane.getNumberOfPlayers(); ++i) {
-            mapOfPlayerStrategies.put(i, new Pair(leftBorderPane.getListOfPlayerAlgorithms()[i], leftBorderPane.getListOfPlayerHeuristics()[i]));
+            mapOfPlayerStrategies
+                    .put(i, new Pair(leftBorderPane.getListOfPlayerAlgorithms()[i], leftBorderPane.getListOfPlayerHeuristics()[i]));
         }
 
         return new GameAttributes.GameAttributesBuilder()

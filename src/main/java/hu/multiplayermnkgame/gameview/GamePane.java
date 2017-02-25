@@ -52,6 +52,7 @@ public class GamePane extends BorderPane {
 
         setTop(title);
         setRight(scrollPaneLog);
+        setPadding(new Insets(5, 10, 5, 5));
         setBottom(hBox);
         setStyle("-fx-background-color:lemonchiffon");
     }
@@ -75,7 +76,7 @@ public class GamePane extends BorderPane {
 
         Text stepLog = new Text(gameState.lastStep.player + " játékos\n"
                 + gameState.lastStep.toString() + "\n");
-        stepLog.setFill( attributes.getPlayerColors().get(gameState.lastStep.player - 1));
+        stepLog.setFill(attributes.getPlayerColors().get(gameState.lastStep.player - 1));
 
         textAreaLog.appendText(stepLog.getText());
 
@@ -89,10 +90,10 @@ public class GamePane extends BorderPane {
 
         textAreaLog.appendText("---VÉGE---\n");
         if (status == -1) {
-            textAreaLog.appendText("DÖNTETLEN");
+            textAreaLog.appendText("DÖNTETLEN\n");
         } else {
             textAreaLog.appendText("Nyert:\n");
-            textAreaLog.appendText(status + ". játékos");
+            textAreaLog.appendText(status + ". játékos\n");
         }
 
     }
@@ -100,21 +101,23 @@ public class GamePane extends BorderPane {
     public void updateBoard(GameState gs) {
         int player = gs.lastStep.player;
 
-        if(attributes.isLogging() && gs.state.countAllMarks() > 1){
+        if (attributes.isLogging() && gs.state.countAllMarks() > 1) {
             boardPane.clearNumbers();
+
+            textAreaLog.appendText("\n" + player + " " + attributes.getMapOfPlayerStrategies().get(player).getValue().name() + "\n");
 
             Color color = attributes.getPlayerColors().get(player - 1);
             boardPane.setSign(gs.lastStep.getX() - 1, gs.lastStep.getY() - 1, color);
 
-            for(int i = 0; i < attributes.getM(); ++i){
-                for(int j = 0; j < attributes.getN(); ++j){
-                    double value = gs.details[i+1][j+1];
-                    if(value != 0){
-                        boardPane.setSign(i,j,String.valueOf(value));
+            for (int i = 0; i < attributes.getM(); ++i) {
+                for (int j = 0; j < attributes.getN(); ++j) {
+                    double value = gs.details[i + 1][j + 1];
+                    if (value != 0) {
+                        boardPane.setSign(i, j, String.valueOf(value));
                     }
                 }
             }
-        }else{
+        } else {
             Color color = attributes.getPlayerColors().get(player - 1);
             boardPane.setSign(gs.lastStep.getX() - 1, gs.lastStep.getY() - 1, color);
         }

@@ -226,7 +226,7 @@ public class State {
     /**
      * Checks if somebody won the game represented by this State.
      *
-     * @return 1...numberOfPlayers if the numberOfPlayers won, 0 if it is a tie
+     * @return 1...numberOfPlayers if the player won, 0 if it is a tie
      */
     public int somebodyWon() {
         int result = checkRows();
@@ -349,17 +349,17 @@ public class State {
         //Under the left main diagonal line
         for (int i = 2; i <= M - K + 1; i++) {
             for (int j = 1, k = i; j <= Math.min(N, M - i + 1); j++, k++) {
-                if (a[j][k] != 0) {
+                if (a[k][j] != 0) {
                     if (player == 0) {
-                        player = a[j][k];
+                        player = a[k][j];
                         count++;
-                    } else if (player == a[j][k]) {
+                    } else if (player == a[k][j]) {
                         count++;
-                    } else if (player != a[j][k]) {
+                    } else if (player != a[k][j]) {
                         if (count >= K) {
                             return player;
                         } else {
-                            player = a[j][k];
+                            player = a[k][j];
                             count = 1;
                         }
                     }

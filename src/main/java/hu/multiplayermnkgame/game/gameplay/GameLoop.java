@@ -16,8 +16,6 @@ public class GameLoop {
 
     private GameState gameState;
 
-    private int numberOfMarks;
-
     private int status;
 
     public GameLoop(GameAttributes gameAttributes) {
@@ -34,14 +32,12 @@ public class GameLoop {
 
         status = gameState.isEnd();
 
-        numberOfMarks = 1;
-
         return gameState;
     }
 
     public GameState nextMove() {
 
-        int player = (numberOfMarks - 1) % attributes.getNumberOfPlayers() + 1;
+        int player = gameState.player;
 
         Step bestStep = attributes.getMapOfPlayerStrategies().get(player).getKey()
                 .offer(gameState, playSpace, attributes.getMapOfPlayerStrategies().get(player).getValue());
@@ -51,8 +47,6 @@ public class GameLoop {
         gameState.details = attributes.getMapOfPlayerStrategies().get(player).getKey().getDetails();
 
         status = gameState.isEnd();
-
-        numberOfMarks++;
 
         return gameState;
     }

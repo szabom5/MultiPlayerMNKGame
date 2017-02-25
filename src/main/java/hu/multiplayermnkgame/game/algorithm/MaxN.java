@@ -29,7 +29,7 @@ public class MaxN implements MultiPlayerAlgorithm {
             if (step.applicable(state) && step.nextToMark(state)) {
 
                 int supportedPlayer = state.player;
-                double[] value = eval(step.apply(state), ps, h, 0);
+                double[] value = eval(step.apply(state), ps, h, 3);
 
                 details[step.getX()][step.getY()] = value[supportedPlayer];
 
@@ -51,8 +51,15 @@ public class MaxN implements MultiPlayerAlgorithm {
     private double[] eval(GameState state, PlaySpace ps, Heuristic heur, int limit) {
         if (state.isEnd() != 0 || limit == 0) {
             double[] result = new double[attributes.getNumberOfPlayers() + 1];
+
             for (int i = 1; i <= attributes.getNumberOfPlayers(); ++i) {
                 result[i] = heur.heuristic(state, i);
+
+                for (int j = 1; j <= attributes.getNumberOfPlayers(); ++j) {
+                    if (j != i) {
+                        result[j] -= result[i];
+                    }
+                }
             }
 
             return result;

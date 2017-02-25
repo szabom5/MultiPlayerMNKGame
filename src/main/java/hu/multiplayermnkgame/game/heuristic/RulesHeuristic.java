@@ -227,7 +227,7 @@ public class RulesHeuristic implements Heuristic {
         //Under the right main diagonal line
         for (int i = 2; i <= attributes.getM() - attributes.getK() + 1; i++) {
             StringBuilder sb = new StringBuilder();
-            for (int j = attributes.getN(), k = i; j <= Math.max(1, attributes.getN() - attributes.getM() + i); j--, k++) {
+            for (int j = attributes.getN(), k = i; j >= Math.max(1, attributes.getN() - attributes.getM() + i); j--, k++) {
                 sb.append(state.a[k][j]);
             }
             matchPatternToString(sb.toString());
@@ -236,7 +236,7 @@ public class RulesHeuristic implements Heuristic {
 
     private void checkAboveRightMainDiagonal() {
         //Above the right main diagonal line
-        for (int j = attributes.getN() - 1; j <= attributes.getK(); j--) {
+        for (int j = attributes.getN() - 1; j >= attributes.getK(); j--) {
             StringBuilder sb = new StringBuilder();
             for (int i = 1, k = j; i <= j; i++, k--) {
                 sb.append(state.a[i][k]);
