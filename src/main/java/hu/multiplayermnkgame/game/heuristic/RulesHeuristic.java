@@ -238,7 +238,7 @@ public class RulesHeuristic implements Heuristic {
         //Above the right main diagonal line
         for (int j = attributes.getN() - 1; j >= attributes.getK(); j--) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 1, k = j; i <= j; i++, k--) {
+            for (int i = 1, k = j; k >= 1 && i <= attributes.getM(); i++, k--) {
                 sb.append(state.a[i][k]);
             }
             matchPatternToString(sb.toString());
