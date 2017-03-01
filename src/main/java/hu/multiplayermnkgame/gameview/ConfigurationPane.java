@@ -184,13 +184,46 @@ public class ConfigurationPane extends BorderPane {
 
             eventHandler.handle(actionEvent);
         } else {
-            //TODO Error message
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Hibás adatok lettek megadva!\n" +
+                    "Így nem lehet a játékot konfigurálni,\nkérem változtasson a tábla méretein \nvagy a nyerő jelsorozat hosszán!", ButtonType.OK);
+            alert.setHeaderText("Figyelmeztetés");
+            alert.setTitle("Figyelmeztetés");
+            alert.showAndWait();
         }
     }
 
     private boolean isInputFromUserValid() {
-        //TODO checking for invalid initializations
-        return true;
+        return isTextFieldValid(textFieldM) && isTextFieldValid(textFieldN) && isTextFieldKValid();
+    }
+
+    private boolean isTextFieldValid(TextField textField) {
+        boolean valid = false;
+        if (!(textField.getText() == null || textField.getText().length() == 0)) {
+            try {
+                Integer data = Integer.parseInt(textField.getText());
+                if (1.0 <= data && data <= 100.0) {
+                    valid = true;
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
+        return valid;
+    }
+
+    private boolean isTextFieldKValid() {
+        boolean valid = false;
+        if (!(textFieldK.getText() == null || textFieldK.getText().length() == 0)) {
+            try {
+                Integer data = Integer.parseInt(textFieldK.getText());
+                Integer m = Integer.parseInt(textFieldM.getText());
+                Integer n = Integer.parseInt(textFieldN.getText());
+                if (2.0 <= data && data <= Math.max(m, n)) {
+                    valid = true;
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
+        return valid;
     }
 
     @FXML
