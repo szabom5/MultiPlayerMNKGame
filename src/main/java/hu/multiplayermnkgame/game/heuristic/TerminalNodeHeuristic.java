@@ -14,7 +14,8 @@ public class TerminalNodeHeuristic implements Heuristic {
     public double heuristic(GameState gs, int player) {
         State state = gs.state;
         double result = 1;
-        int winner = state.somebodyWon();
+        //int winner = state.somebodyWon();
+        int winner = state.isEnd(gs.lastStep.getX(), gs.lastStep.getY());
 
         if (winner == player) {
             result = 10;

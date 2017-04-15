@@ -29,7 +29,7 @@ public class MaxN implements MultiPlayerAlgorithm {
             if (step.applicable(state) && step.nextToMark(state)) {
 
                 int supportedPlayer = state.player;
-                double[] value = eval(step.apply(state), ps, h, 3);
+                double[] value = eval(step.apply(state), ps, h, 4);
 
                 details[step.getX()][step.getY()] = value[supportedPlayer];
 
@@ -53,7 +53,7 @@ public class MaxN implements MultiPlayerAlgorithm {
             double[] result = new double[attributes.getNumberOfPlayers() + 1];
 
             for (int i = 1; i <= attributes.getNumberOfPlayers(); ++i) {
-                result[i] = heur.heuristic(state, i);
+                result[i] += heur.heuristic(state, i);
 
                 for (int j = 1; j <= attributes.getNumberOfPlayers(); ++j) {
                     if (j != i) {
@@ -72,14 +72,6 @@ public class MaxN implements MultiPlayerAlgorithm {
             if (step.applicable(state) && step.nextToMark(state)) {
 
                 double[] value = eval(step.apply(state), ps, heur, limit - 1);
-
-                /*
-                //only for the optimized PatternHeuristic
-                if(heur instanceof PatternHeur && limit < numberOfPlayers){
-                    int[] newValues = heur.heuristic(state);
-                    value[state.player] = newValues[state.player];
-                   // System.out.println("new value: "+newValues[state.player]);
-                }*/
 
                 if (maxV[state.player] < value[state.player]) {
                     maxV = value;
