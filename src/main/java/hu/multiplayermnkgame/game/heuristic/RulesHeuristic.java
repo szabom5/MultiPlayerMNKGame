@@ -60,12 +60,12 @@ public class RulesHeuristic implements Heuristic {
 
     /**
      * Generates Patterns for each player, creating a regular expression for a winning line.
-     * Example regex: .*?1{5}.*?
+     * Example regex: 1{5}
      * The "001111120" is a winning line for player 1
      */
     private void initFirstRulePatterns() {
         for (int i = 1; i <= attributes.getNumberOfPlayers(); ++i) {
-            Pattern pattern = Pattern.compile(".*?" + i + "{" + attributes.getK() + "}.*?");
+            Pattern pattern = Pattern.compile( i + "{" + attributes.getK() + "}");
             patternFirstRule.add(pattern);
         }
     }
@@ -73,7 +73,8 @@ public class RulesHeuristic implements Heuristic {
     /**
      * Generates Patterns for each player, creating a regular expression for a line of blocking the opponent.
      * For each player there is a list of Patterns containing all the possible opponents that the player could block.
-     * Example regex: .*?[^2]?2{4}1.*?|.*?12{4}[^2].*?
+     * Regex: [^E]E{k-1}J|^E{k-1}J|JE{k-1}[^E]
+     * Example regex: [^2]2{4}1|^2{4}1|12{4}[^2]
      * The "002222100" or "0012222000" is a line where player 1 is blocking the second player from one side.
      */
     private void initSecondRulePatterns() {
@@ -87,8 +88,9 @@ public class RulesHeuristic implements Heuristic {
                 }
 
                 Pattern pattern =
-                        Pattern.compile(".*?[^" + j + "]?" + j + "{" + (attributes.getK() - 1) + "}" + i + ".*?" +
-                                "|.*?" + i + j + "{" + (attributes.getK() - 1) + "}[^" + j + "]?.*?");
+                        Pattern.compile("[^" + j + "]" + j + "{" + (attributes.getK() - 1) + "}" + i +
+                                "|" + "^" + j + "{" + (attributes.getK() - 1) + "}" + i +
+                                "|" + i + j + "{" + (attributes.getK() - 1) + "}[^" + j + "]");
 
                 blockOtherPlayerPatterns.add(pattern);
             }
@@ -101,9 +103,12 @@ public class RulesHeuristic implements Heuristic {
      * Generates Patterns for each player, creating a regular expression for every possible number of marks that can be
      * placed next to each other, and assigning a value to it. This value is calculated with the exact number of
      * marks counted: 2^i, where i is this number.
-     * Example regex 1 : .*?0{2}1{3}0{3}[^01]*?
-     * Example regex 2 : [^01]*?0{0,3}1{3}0{2}.*?
-     * Example regex 3 : .*?0{2}1{3}0{2}.*?
+     * Regex 1: 0{k-i}J{i}(0{1,max(1,k-i-1)}[^0]|[^0J])
+     * Regex 2: ([^0]0{1,max(1,k-i-1)}|[^0J])J{i}0{k-i}
+     * Regex 3: 0{k-i}J{i}0{k-i}
+     * Example regex 1 : 0{2}1{3}(0{1,3}[^0]|[^01])
+     * Example regex 2 : ([^0]0{1,3}|[^01])1{3}0{2}
+     * Example regex 3 : 0{2}1{3}0{2}
      * The "00001112" or "221110000" is a line where player 1 has placed 3 marks already,
      * but can continue the line in only one direction. Value: 2^3 = 8
      * However the "0011100" or "00111000" is a line where player 1 has placed 3 marks already,
@@ -115,18 +120,18 @@ public class RulesHeuristic implements Heuristic {
         for (int p = 1; p <= attributes.getNumberOfPlayers(); ++p) {
 
             Map<Pattern, Double> patterns = new HashMap<>();
-            for (int i = 1; i <= K; ++i) {
+            for (int i = 1; i < K; ++i) {
 
                 Pattern patterns1side1 =
-                        Pattern.compile(".*?0{" + (K - i) + "}" + p + "{" + i + "}0{0," + Math.max((K - i - 1), 0) + "}[^0" + p + "]*?");
+                        Pattern.compile("0{" + (K - i) + "}" + p + "{" + i + "}(0{1," + Math.max((K - i - 1), 1) + "}[^0]|[^0" + p + "])");
                 patterns.put(patterns1side1, Math.pow(2, i));
 
                 Pattern patterns1side2 =
-                        Pattern.compile("[^0" + p + "]*?0{0," + Math.max((K - i - 1), 0) + "}" + p + "{" + i + "}0{" + (K - i) + "}.*?");
+                        Pattern.compile("([^0]0{1," + Math.max((K - i - 1), 1) + "}|[^0" + p + "])" + p + "{" + i + "}0{" + (K - i) + "}");
                 patterns.put(patterns1side2, Math.pow(2, i));
 
                 Pattern pattern2 =
-                        Pattern.compile(".*?0{" + (K - i) + "}" + p + "{" + i + "}0{" + (K - i) + "}.*?");
+                        Pattern.compile("0{" + (K - i) + "}" + p + "{" + i + "}0{" + (K - i) + "}");
                 patterns.put(pattern2, 2 * Math.pow(2, i));
             }
             patternThirdRule.add(patterns);
@@ -255,7 +260,7 @@ public class RulesHeuristic implements Heuristic {
 
     private void matchFirstRuleToString(String s) {
         Matcher m = patternFirstRule.get(supportedPlayer - 1).matcher(s);
-        if (m.matches()) {
+        if (m.find()) {
             result += 10000;
         }
     }
@@ -263,7 +268,7 @@ public class RulesHeuristic implements Heuristic {
     private void matchSecondRuleToString(String s) {
         for (int i = 0; i < patternSecondRule.get(supportedPlayer - 1).size(); ++i) {
             Matcher m = patternSecondRule.get(supportedPlayer - 1).get(i).matcher(s);
-            if (m.matches()) {
+            if (m.find()) {
                 result += 1000;
             }
         }
@@ -272,7 +277,7 @@ public class RulesHeuristic implements Heuristic {
     private void matchThirdRuleToString(String s) {
         for (Map.Entry<Pattern, Double> entry : patternThirdRule.get(supportedPlayer - 1).entrySet()) {
             Matcher m = entry.getKey().matcher(s);
-            if (m.matches()) {
+            if (m.find()) {
                 result += entry.getValue();
             }
         }
