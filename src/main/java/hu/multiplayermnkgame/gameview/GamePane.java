@@ -1,19 +1,20 @@
 package hu.multiplayermnkgame.gameview;
 
+import hu.multiplayermnkgame.analyse.TreeNode;
 import hu.multiplayermnkgame.game.gameplay.GameLoop;
 import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 import hu.multiplayermnkgame.game.gamerepresentation.GameState;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class GamePane extends BorderPane {
 
@@ -26,6 +27,8 @@ public class GamePane extends BorderPane {
     private BoardPane boardPane;
 
     private Button nextMoveButton;
+
+    private CheckBox checkBoxCreateTree;
 
     public GamePane() {
         Label title = new Label("Többszemélyes m,n,k-játék");
@@ -46,7 +49,10 @@ public class GamePane extends BorderPane {
         nextMoveButton.setOnAction(this::handleNextMove);
         nextMoveButton.setAlignment(Pos.CENTER);
 
-        HBox hBox = new HBox(10, nextMoveButton);
+        checkBoxCreateTree = new CheckBox("Lépésajánlás elemző fa");
+        checkBoxCreateTree.setSelected(false);
+
+        HBox hBox = new HBox(10, nextMoveButton, checkBoxCreateTree);
         hBox.setPadding(new Insets(10, 10, 10, 10));
         hBox.setAlignment(Pos.CENTER);
 
@@ -74,6 +80,7 @@ public class GamePane extends BorderPane {
 
         updateBoard(gameState);
 
+
         Text stepLog = new Text(gameState.lastStep.player + " játékos\n"
                 + gameState.lastStep.toString() + "\n");
         stepLog.setFill(attributes.getPlayerColors().get(gameState.lastStep.player - 1));
@@ -83,6 +90,30 @@ public class GamePane extends BorderPane {
         if (gameLoop.getStatus() != 0) {
             handleGameEnding(gameLoop.getStatus());
         }
+
+        if (checkBoxCreateTree.isSelected()) {
+            createTree(gameState.treeRoot);
+        }
+
+        checkBoxCreateTree.setSelected(false);
+    }
+
+    private void createTree(TreeItem rootNode) {
+
+        Scene scene = new Scene(new VBox(), 600, 400);
+        Stage stage = new Stage();
+        stage.setTitle("A lépésajánló algoritmus játékfája");
+
+        TreeView<TreeNode> treeView = new TreeView<>(rootNode);
+
+        treeView.setMaxWidth(Double.MAX_VALUE);
+        treeView.setMaxHeight(Double.MAX_VALUE);
+        ((VBox) scene.getRoot()).setMaxHeight(Double.MAX_VALUE);
+
+        ((VBox) scene.getRoot()).getChildren().add(treeView);
+
+        stage.setScene(scene);
+        stage.show();
     }
 
     private void handleGameEnding(int status) {
@@ -112,7 +143,7 @@ public class GamePane extends BorderPane {
             for (int i = 0; i < attributes.getM(); ++i) {
                 for (int j = 0; j < attributes.getN(); ++j) {
                     double value = gs.details[i + 1][j + 1];
-                    if (value != 0) {
+                    if (value != 0.1) {
                         boardPane.setSign(i, j, String.valueOf(value));
                     }
                 }

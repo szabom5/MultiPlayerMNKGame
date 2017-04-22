@@ -1,6 +1,7 @@
 package hu.multiplayermnkgame.gameview;
 
 import hu.multiplayermnkgame.game.algorithm.MaxN;
+import hu.multiplayermnkgame.game.algorithm.MaxN0;
 import hu.multiplayermnkgame.game.algorithm.MultiPlayerAlgorithm;
 import hu.multiplayermnkgame.game.algorithm.Paranoid;
 import hu.multiplayermnkgame.game.heuristic.Heuristic;
@@ -87,7 +88,7 @@ public class ConfigurationPane extends BorderPane {
         label2.setPrefWidth(200);
         gridPane.addRow(1, label2);
 
-        textFieldK = new TextField("3");
+        textFieldK = new TextField("4");
         textFieldK.setMaxWidth(40);
         gridPane.addRow(1, textFieldK);
 
@@ -151,8 +152,8 @@ public class ConfigurationPane extends BorderPane {
         hBox.getChildren().add(new Label(player + "."));
 
         ComboBox comboBoxAlgorithm = new ComboBox(FXCollections.observableArrayList(
-                "Max N", "Paranoid"));
-        comboBoxAlgorithm.setValue("Max N");
+                "Max N 0", "Max N", "Paranoid"));
+        comboBoxAlgorithm.setValue("Max N 0");
         hBox.getChildren().add(comboBoxAlgorithm);
 
         ComboBox comboBoxHeuristic = new ComboBox(FXCollections.observableArrayList(
@@ -216,9 +217,12 @@ public class ConfigurationPane extends BorderPane {
 
         listOfPlayerAlgorithms = new MultiPlayerAlgorithm[numberOfPlayers + 1];
         for (int i = 1; i <= numberOfPlayers; i++) {
-            if (((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(1)).getValue().toString().equals("Max N")) {
+            String algorithm = ((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(1)).getValue().toString();
+            if (algorithm.equals("Max N 0")) {
+                listOfPlayerAlgorithms[i] = new MaxN0();
+            } else if (algorithm.equals("Max N")) {
                 listOfPlayerAlgorithms[i] = new MaxN();
-            } else {
+            } else if (algorithm.equals("Paranoid")) {
                 listOfPlayerAlgorithms[i] = new Paranoid();
             }
         }
