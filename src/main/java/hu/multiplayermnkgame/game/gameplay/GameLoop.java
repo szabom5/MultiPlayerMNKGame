@@ -1,5 +1,6 @@
 package hu.multiplayermnkgame.game.gameplay;
 
+import hu.multiplayermnkgame.game.algorithm.MultiPlayerAlgorithm;
 import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 import hu.multiplayermnkgame.game.gamerepresentation.GameState;
 import hu.multiplayermnkgame.game.gamerepresentation.Step;
@@ -39,8 +40,9 @@ public class GameLoop {
 
         int player = gameState.player;
 
-        Step bestStep = attributes.getMapOfPlayerStrategies().get(player).getKey()
-                .offer(gameState, playSpace, attributes.getMapOfPlayerStrategies().get(player).getValue());
+        MultiPlayerAlgorithm algorithm = attributes.getMapOfPlayerStrategies().get(player).getKey();
+
+        Step bestStep = algorithm.offer(gameState, playSpace, attributes.getMapOfPlayerStrategies().get(player).getValue());
 
         gameState = bestStep.apply(gameState);
 

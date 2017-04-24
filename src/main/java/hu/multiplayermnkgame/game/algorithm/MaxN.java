@@ -17,19 +17,18 @@ public class MaxN implements MultiPlayerAlgorithm {
         this.attributes = attributes;
     }
 
-
     @Override
     public Step offer(GameState state, PlaySpace ps, Heuristic h) {
         double max = Integer.MIN_VALUE;
         Step bestStep = null;
 
-        this.details = new double[attributes.getM() + 1][attributes.getN() + 1];
+        initDetails();
 
         for (Step step : ps.steps) {
             if (step.applicable(state) && step.nextToMark(state)) {
-
                 int supportedPlayer = state.player;
-                double[] value = eval(step.apply(state), ps, h, 4);
+
+                double[] value = eval(step.apply(state), ps, h, 3);
 
                 details[step.getX()][step.getY()] = value[supportedPlayer];
 
@@ -79,6 +78,15 @@ public class MaxN implements MultiPlayerAlgorithm {
             }
 
         return maxV;
+    }
+
+    private void initDetails() {
+        details = new double[attributes.getM() + 1][attributes.getN() + 1];
+        for (int i = 0; i < details.length; ++i) {
+            for (int j = 0; j < details[0].length; ++j) {
+                details[i][j] = 0.1;
+            }
+        }
     }
 
     @Override

@@ -1,20 +1,16 @@
 package hu.multiplayermnkgame.gameview;
 
-import hu.multiplayermnkgame.analyse.TreeNode;
 import hu.multiplayermnkgame.game.gameplay.GameLoop;
 import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 import hu.multiplayermnkgame.game.gamerepresentation.GameState;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class GamePane extends BorderPane {
 
@@ -27,8 +23,6 @@ public class GamePane extends BorderPane {
     private BoardPane boardPane;
 
     private Button nextMoveButton;
-
-    private CheckBox checkBoxCreateTree;
 
     public GamePane() {
         Label title = new Label("Többszemélyes m,n,k-játék");
@@ -49,10 +43,7 @@ public class GamePane extends BorderPane {
         nextMoveButton.setOnAction(this::handleNextMove);
         nextMoveButton.setAlignment(Pos.CENTER);
 
-        checkBoxCreateTree = new CheckBox("Lépésajánlás elemző fa");
-        checkBoxCreateTree.setSelected(false);
-
-        HBox hBox = new HBox(10, nextMoveButton, checkBoxCreateTree);
+        HBox hBox = new HBox(10, nextMoveButton);
         hBox.setPadding(new Insets(10, 10, 10, 10));
         hBox.setAlignment(Pos.CENTER);
 
@@ -91,29 +82,6 @@ public class GamePane extends BorderPane {
             handleGameEnding(gameLoop.getStatus());
         }
 
-        if (checkBoxCreateTree.isSelected()) {
-            createTree(gameState.treeRoot);
-        }
-
-        checkBoxCreateTree.setSelected(false);
-    }
-
-    private void createTree(TreeItem rootNode) {
-
-        Scene scene = new Scene(new VBox(), 600, 400);
-        Stage stage = new Stage();
-        stage.setTitle("A lépésajánló algoritmus játékfája");
-
-        TreeView<TreeNode> treeView = new TreeView<>(rootNode);
-
-        treeView.setMaxWidth(Double.MAX_VALUE);
-        treeView.setMaxHeight(Double.MAX_VALUE);
-        ((VBox) scene.getRoot()).setMaxHeight(Double.MAX_VALUE);
-
-        ((VBox) scene.getRoot()).getChildren().add(treeView);
-
-        stage.setScene(scene);
-        stage.show();
     }
 
     private void handleGameEnding(int status) {

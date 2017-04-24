@@ -5,7 +5,6 @@ import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 import hu.multiplayermnkgame.game.gamerepresentation.GameState;
 import hu.multiplayermnkgame.game.gamerepresentation.Step;
 import hu.multiplayermnkgame.game.heuristic.Heuristic;
-import javafx.scene.control.TreeItem;
 
 import java.util.Arrays;
 
@@ -88,11 +87,6 @@ public class MaxN0 implements MultiPlayerAlgorithm {
                 details[i][j] = 0.1;
             }
         }
-    }
-
-    @Override
-    public TreeItem getRoot() {
-        return null;
     }
 
     @Override

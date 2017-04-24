@@ -3,6 +3,7 @@ package hu.multiplayermnkgame.game.statespacerepresentation;
 import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class State {
@@ -223,264 +224,26 @@ public class State {
         return isEnd(x, y) != -1;
     }
 
-    /**
-     * Checks if somebody won the game represented by this State.
-     *
-     * @return 1...numberOfPlayers if the player won, 0 if it is a tie
-     */
-    public int somebodyWon() {
-        int result = checkRows();
-        result = result == 0 ? checkColumns() : result;
-        result = result == 0 ? checkDiagonals() : result;
-        return result;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        State state = (State) o;
+
+        boolean equals = true;
+        for(int i = 1; i <= attributes.getM(); ++i){
+            for(int j = 1; j <= attributes.getN(); ++j){
+                equals &= a[i][j] == state.a[i][j];
+            }
+        }
+        return equals;
+
     }
 
-    private int checkRows() {
-        int M = attributes.getM();
-        int N = attributes.getN();
-        int K = attributes.getK();
-
-        int player = 0;
-        int count = 0;
-
-        for (int i = 1; i <= M; i++) {
-            for (int j = 1; j <= N; j++) {
-                if (a[i][j] != 0) {
-                    if (player == 0) {
-                        player = a[i][j];
-                        count++;
-                    } else if (player == a[i][j]) {
-                        count++;
-                    } else if (player != a[i][j]) {
-                        if (count >= K) {
-                            return player;
-                        } else {
-                            player = a[i][j];
-                            count = 1;
-                        }
-                    }
-                }
-            }
-            if (count >= K) {
-                return player;
-            } else {
-                count = 0;
-            }
-        }
-        if (count >= K) {
-            return player;
-        } else {
-            return 0;
-        }
-    }
-
-    private int checkColumns() {
-        int M = attributes.getM();
-        int N = attributes.getN();
-        int K = attributes.getK();
-
-        int player = 0;
-        int count = 0;
-
-        for (int j = 1; j <= N; j++) {
-            for (int i = 1; i <= M; i++) {
-                if (a[i][j] != 0) {
-                    if (player == 0) {
-                        player = a[i][j];
-                        count++;
-                    } else if (player == a[i][j]) {
-                        count++;
-                    } else if (player != a[i][j]) {
-                        if (count >= K) {
-                            return player;
-                        } else {
-                            player = a[i][j];
-                            count = 1;
-                        }
-                    }
-                }
-            }
-            if (count >= K) {
-                return player;
-            } else {
-                count = 0;
-            }
-        }
-        if (count >= K) {
-            return player;
-        } else {
-            return 0;
-        }
-    }
-
-    private int checkDiagonals() {
-        int M = attributes.getM();
-        int N = attributes.getN();
-        int K = attributes.getK();
-
-        int player = 0;
-        int count = 0;
-
-        // Left main diagonal line
-        for (int i = 1; i <= Math.min(M, N); i++) {
-            if (a[i][i] != 0) {
-                if (player == 0) {
-                    player = a[i][i];
-                    count++;
-                } else if (player == a[i][i]) {
-                    count++;
-                } else if (player != a[i][i]) {
-                    if (count >= K) {
-                        return player;
-                    } else {
-                        player = a[i][i];
-                        count = 1;
-                    }
-                }
-            }
-        }
-
-        if (count >= K) {
-            return player;
-        } else {
-            count = 0;
-        }
-
-        //Under the left main diagonal line
-        for (int i = 2; i <= M - K + 1; i++) {
-            for (int j = 1, k = i; j <= Math.min(N, M - i + 1); j++, k++) {
-                if (a[k][j] != 0) {
-                    if (player == 0) {
-                        player = a[k][j];
-                        count++;
-                    } else if (player == a[k][j]) {
-                        count++;
-                    } else if (player != a[k][j]) {
-                        if (count >= K) {
-                            return player;
-                        } else {
-                            player = a[k][j];
-                            count = 1;
-                        }
-                    }
-                }
-            }
-            if (count >= K) {
-                return player;
-            } else {
-                count = 0;
-            }
-        }
-
-        //Above the left main diagonal line
-        for (int j = 2; j <= N - K + 1; j++) {
-            for (int i = 1, k = j; i <= Math.min(N, N - j + 1); i++, k++) {
-                if (a[i][k] != 0) {
-                    if (player == 0) {
-                        player = a[i][k];
-                        count++;
-                    } else if (player == a[i][k]) {
-                        count++;
-                    } else if (player != a[i][k]) {
-                        if (count >= K) {
-                            return player;
-                        } else {
-                            player = a[i][k];
-                            count = 1;
-                        }
-                    }
-                }
-            }
-            if (count >= K) {
-                return player;
-            } else {
-                count = 0;
-            }
-        }
-
-        //Right main diagonal line
-        for (int i = 1, j; i <= Math.min(N, N); i++) {
-            j = N - i + 1;
-            if (a[i][j] != 0) {
-                if (player == 0) {
-                    player = a[i][j];
-                    count++;
-                } else if (player == a[i][j]) {
-                    count++;
-                } else if (player != a[i][j]) {
-                    if (count >= K) {
-                        return player;
-                    } else {
-                        player = a[i][j];
-                        count = 1;
-                    }
-                }
-            }
-        }
-
-        if (count >= K) {
-            return player;
-        } else {
-            count = 0;
-        }
-
-        //Under the right main diagonal line
-        for (int i = 2; i <= M - K + 1; i++) {
-            for (int j = N, k = i; j <= Math.max(1, N - M + i); j--, k++) {
-                if (a[j][k] != 0) {
-                    if (player == 0) {
-                        player = a[j][k];
-                        count++;
-                    } else if (player == a[j][k]) {
-                        count++;
-                    } else if (player != a[j][k]) {
-                        if (count >= K) {
-                            return player;
-                        } else {
-                            player = a[j][k];
-                            count = 1;
-                        }
-                    }
-                }
-            }
-            if (count >= K) {
-                return player;
-            } else {
-                count = 0;
-            }
-        }
-
-        //Above the right main diagonal line
-        for (int j = N - 1; j <= K; j--) {
-            for (int i = 1, k = j; i <= j; i++, k--) {
-                if (a[i][k] != 0) {
-                    if (player == 0) {
-                        player = a[i][k];
-                        count++;
-                    } else if (player == a[i][k]) {
-                        count++;
-                    } else if (player != a[i][k]) {
-                        if (count >= K) {
-                            return player;
-                        } else {
-                            player = a[i][k];
-                            count = 1;
-                        }
-                    }
-                }
-            }
-            if (count >= K) {
-                return player;
-            } else {
-                count = 0;
-            }
-        }
-
-        if (count >= K) {
-            return player;
-        } else {
-            return 0;
-        }
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(a);
     }
 
     public String toString() {
