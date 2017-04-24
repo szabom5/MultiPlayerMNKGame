@@ -1,10 +1,13 @@
 package hu.multiplayermnkgame.gameview;
 
 import hu.multiplayermnkgame.game.algorithm.MaxN;
+import hu.multiplayermnkgame.game.algorithm.MaxN0;
 import hu.multiplayermnkgame.game.algorithm.MultiPlayerAlgorithm;
 import hu.multiplayermnkgame.game.algorithm.Paranoid;
 import hu.multiplayermnkgame.game.heuristic.Heuristic;
+import hu.multiplayermnkgame.game.heuristic.RandomHeuristic;
 import hu.multiplayermnkgame.game.heuristic.RulesHeuristic;
+import hu.multiplayermnkgame.game.heuristic.TerminalNodeHeuristic;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -85,7 +88,7 @@ public class ConfigurationPane extends BorderPane {
         label2.setPrefWidth(200);
         gridPane.addRow(1, label2);
 
-        textFieldK = new TextField("3");
+        textFieldK = new TextField("4");
         textFieldK.setMaxWidth(40);
         gridPane.addRow(1, textFieldK);
 
@@ -149,12 +152,12 @@ public class ConfigurationPane extends BorderPane {
         hBox.getChildren().add(new Label(player + "."));
 
         ComboBox comboBoxAlgorithm = new ComboBox(FXCollections.observableArrayList(
-                "Max N", "Paranoid"));
-        comboBoxAlgorithm.setValue("Max N");
+                "Max N 0", "Max N", "Paranoid"));
+        comboBoxAlgorithm.setValue("Max N 0");
         hBox.getChildren().add(comboBoxAlgorithm);
 
         ComboBox comboBoxHeuristic = new ComboBox(FXCollections.observableArrayList(
-                "Rules Heuristic"));
+                "Rules Heuristic", "TerminalNode", "Random"));
         comboBoxHeuristic.setValue("Rules Heuristic");
         hBox.getChildren().add(comboBoxHeuristic);
         ObservableList<String> colors = FXCollections.observableArrayList("blue", "red", "gold",
@@ -235,19 +238,24 @@ public class ConfigurationPane extends BorderPane {
 
         listOfPlayerHeuristics = new Heuristic[numberOfPlayers + 1];
         for (int i = 1; i <= numberOfPlayers; i++) {
-            if (((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(2)).getValue().toString().equals("Rules Heuristic")) {
+            String heuristic = ((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(2)).getValue().toString();
+            if (heuristic.equals("Rules Heuristic")) {
                 listOfPlayerHeuristics[i] = new RulesHeuristic();
-            } else {
-                //no other option
-                listOfPlayerHeuristics[i] = new RulesHeuristic();
+            } else if (heuristic.equals("TerminalNode")) {
+                listOfPlayerHeuristics[i] = new TerminalNodeHeuristic();
+            } else if (heuristic.equals("Random")) {
+                listOfPlayerHeuristics[i] = new RandomHeuristic();
             }
         }
 
         listOfPlayerAlgorithms = new MultiPlayerAlgorithm[numberOfPlayers + 1];
         for (int i = 1; i <= numberOfPlayers; i++) {
-            if (((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(1)).getValue().toString().equals("Max N")) {
+            String algorithm = ((ComboBox) ((HBox) gridPanePlayers.getChildren().get(i - 1)).getChildren().get(1)).getValue().toString();
+            if (algorithm.equals("Max N 0")) {
+                listOfPlayerAlgorithms[i] = new MaxN0();
+            } else if (algorithm.equals("Max N")) {
                 listOfPlayerAlgorithms[i] = new MaxN();
-            } else {
+            } else if (algorithm.equals("Paranoid")) {
                 listOfPlayerAlgorithms[i] = new Paranoid();
             }
         }

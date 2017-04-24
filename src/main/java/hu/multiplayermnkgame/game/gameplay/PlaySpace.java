@@ -1,6 +1,7 @@
 package hu.multiplayermnkgame.game.gameplay;
 
 import hu.multiplayermnkgame.game.algorithm.MaxN;
+import hu.multiplayermnkgame.game.algorithm.MaxN0;
 import hu.multiplayermnkgame.game.algorithm.Paranoid;
 import hu.multiplayermnkgame.game.gamerepresentation.GameAttributes;
 import hu.multiplayermnkgame.game.gamerepresentation.Step;
@@ -34,6 +35,8 @@ public class PlaySpace {
             Pair pair = (Pair) entry.getValue();
             if (pair.getKey() instanceof MaxN) {
                 ((MaxN) pair.getKey()).initialize(gameAttributes);
+            }else if(pair.getKey() instanceof MaxN0){
+                ((MaxN0) pair.getKey()).initialize(gameAttributes);
             }else if(pair.getKey() instanceof Paranoid){
                 ((Paranoid) pair.getKey()).initialize(gameAttributes);
             }

@@ -8,7 +8,7 @@ import hu.multiplayermnkgame.game.heuristic.Heuristic;
 
 import java.util.Arrays;
 
-public class MaxN implements MultiPlayerAlgorithm {
+public class MaxN0 implements MultiPlayerAlgorithm {
     private GameAttributes attributes;
 
     private double[][] details;
@@ -28,7 +28,7 @@ public class MaxN implements MultiPlayerAlgorithm {
             if (step.applicable(state) && step.nextToMark(state)) {
                 int supportedPlayer = state.player;
 
-                double[] value = eval(step.apply(state), ps, h, 3);
+                double[] value = eval(step.apply(state), ps, h, 0);
 
                 details[step.getX()][step.getY()] = value[supportedPlayer];
 
@@ -44,7 +44,7 @@ public class MaxN implements MultiPlayerAlgorithm {
 
     @Override
     public String name() {
-        return "MaxN Algorithm";
+        return "MaxN0 Algorithm";
     }
 
     private double[] eval(GameState state, PlaySpace ps, Heuristic heur, int limit) {
