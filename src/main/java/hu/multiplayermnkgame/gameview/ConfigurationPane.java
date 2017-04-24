@@ -138,8 +138,10 @@ public class ConfigurationPane extends BorderPane {
 
     @FXML
     private void handlePlayerAdded(ActionEvent actionEvent) {
-        numberOfPlayers++;
-        gridPanePlayers.addRow(numberOfPlayers - 1, createHBoxForPlayer(numberOfPlayers));
+        if(numberOfPlayers < 9){
+            numberOfPlayers++;
+            gridPanePlayers.addRow(numberOfPlayers - 1, createHBoxForPlayer(numberOfPlayers));
+        }
     }
 
     private HBox createHBoxForPlayer(int player) {
